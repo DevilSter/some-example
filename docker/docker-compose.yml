@@ -17,7 +17,7 @@ services:
       CUSTOM_SERVER_NAME: "example.loc"
 
   db:
-    image: postgres:13-alpine
+    build: ./db
     ports:
       - "5432:5432"
     environment:
