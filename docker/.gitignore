@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+db/dumps/*
+!db/dumps/.gitignore
+
+.env
+
+.DS_STORE
