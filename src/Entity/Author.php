@@ -9,35 +9,40 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=AuthorRepository::class)
+ * @ORM\Table(name="authors",
+ *     uniqueConstraints={
+ *        @ORM\UniqueConstraint(name="author_unique",
+ *            columns={"first_name", "middle_name", "last_name"})
+ *    })
  */
 class Author
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(name="id", type="integer")
      */
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=false)
      */
     private string $firstName;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
      */
     private string $middleName;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
      */
     private string $lastName;
 
     /**
      * @ORM\ManyToMany(targetEntity=Book::class, mappedBy="authors")
      */
-    private ArrayCollection $books;
+    private Collection $books;
 
     public function __construct()
     {
@@ -92,9 +97,9 @@ class Author
     }
 
     /**
-     * @return Collection|Book[]
+     * @return ArrayCollection|Book[]
      */
-    public function getBooks(): Collection
+    public function getBooks(): ArrayCollection
     {
         return $this->books;
     }

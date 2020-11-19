@@ -20,5 +20,8 @@ make jumpin
    php bin/console doctrine:migrations:migrate
    
 2 Заполняем фикстуры
+    php bin/console doctrine:fixtures:load
+    
+    
   
 

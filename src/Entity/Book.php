@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
+ * @ORM\Table(name="books")
  */
 class Book
 {
@@ -20,14 +21,14 @@ class Book
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private string $title;
 
     /**
      * @ORM\ManyToMany(targetEntity=Author::class, inversedBy="books")
      */
-    private ArrayCollection $authors;
+    private Collection $authors;
 
     public function __construct()
     {
