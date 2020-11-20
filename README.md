@@ -61,7 +61,7 @@ make jumpin
     
     в теле JSON
     {
-        "title": "Алмазы Того"
+        "title": "Алмазы"
     }
     
       

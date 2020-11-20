@@ -42,4 +42,17 @@ class BookRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+    /**
+     * @param string $expression
+     * @return array
+     */
+    public function findLike(string $expression) : array {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.title LIKE :par')
+            ->setParameter("par", '%'.addcslashes($expression, '%_').'%');
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+    }
 }

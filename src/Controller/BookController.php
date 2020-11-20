@@ -112,15 +112,13 @@ class BookController extends OurAbstractController
             try {
                 $searchParams = $form->getData();
 
-                $book = $this->_bookRepository->findOneBy([
-                    'title' => $searchParams['title']
-                ]);
+                $books = $this->_bookRepository->findLike($searchParams['title']);
 
-                if($book == null) {
-                    throw new Exception("Книга не найдена");
+                if(count($books) == 0) {
+                    throw new Exception("Книг не найден");
                 }
 
-                return new JsonResponse($book, Response::HTTP_OK);
+                return new JsonResponse($books, Response::HTTP_OK);
             } catch (Exception $ex) {
                 $errors[] = $ex->getMessage();
             }
