@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -6,12 +7,14 @@ use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=BookRepository::class)
  * @ORM\Table(name="books")
  */
-class Book
+class Book implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -21,6 +24,8 @@ class Book
     private int $id;
 
     /**
+     * @Assert\NotBlank(message="Название книги не может быть пустым")
+     *
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private string $title;
@@ -35,7 +40,7 @@ class Book
         $this->authors = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -74,5 +79,13 @@ class Book
         $this->authors->removeElement($author);
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'title' => $this->getTitle(),
+            'authors' => $this->getAuthors()->toArray()
+        ];
     }
 }

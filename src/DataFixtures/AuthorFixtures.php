@@ -24,6 +24,7 @@ class AuthorFixtures extends Fixture
         $authorsArray = array_unique($authorsArray);
 
         foreach ($authorsArray as $authorStr) {
+            $authorStr = str_replace("\n", '', $authorStr);
             $fio = explode(' ', $authorStr);
 
             $author = new Author();

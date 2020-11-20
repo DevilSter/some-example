@@ -1,9 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repository;
 
 use App\Entity\Book;
+use App\Exception\BookAlreadyExistsException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -18,4 +21,25 @@ class BookRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Book::class);
     }
+
+
+    /**
+     * Простое добавление книги в базу. Не более.
+     *
+     * @param Book $book
+     * @throws BookAlreadyExistsException
+     * @throws ORMException
+     */
+    public function create(Book $book) {
+        // Исключаем дублирование авторов по ФИО (без использования сложных индексов в БД)
+        if($this->findOneBy([
+                'title' => $book->getTitle(),
+            ]) != null) {
+            throw new BookAlreadyExistsException();
+        };
+
+        $this->_em->persist($book);
+        $this->_em->flush();
+    }
+
 }

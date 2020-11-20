@@ -25,6 +25,7 @@ class BookFixtures extends Fixture implements DependentFixtureInterface
         $booksArray = array_unique($booksArray);
 
         foreach ($booksArray as $bookTitle) {
+            $bookTitle = str_replace("\n", '', $bookTitle);
             $book = new Book();
             $book->setTitle($bookTitle);
 

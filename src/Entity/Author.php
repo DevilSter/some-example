@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -6,6 +7,8 @@ use App\Repository\AuthorRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AuthorRepository::class)
@@ -15,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  *            columns={"first_name", "middle_name", "last_name"})
  *    })
  */
-class Author
+class Author implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -25,6 +28,8 @@ class Author
     private int $id;
 
     /**
+     * @Assert\NotBlank(message="Имя не может быть пустым")
+     *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=false)
      */
     private string $firstName;
@@ -32,12 +37,12 @@ class Author
     /**
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
      */
-    private string $middleName;
+    private ?string $middleName = null;
 
     /**
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
      */
-    private string $lastName;
+    private ?string $lastName = null;
 
     /**
      * @ORM\ManyToMany(targetEntity=Book::class, mappedBy="authors")
@@ -49,12 +54,12 @@ class Author
         $this->books = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getFirstName(): ?string
+    public function getFirstName(): string
     {
         return $this->firstName;
     }
@@ -69,7 +74,7 @@ class Author
     /**
      * @return string
      */
-    public function getMiddleName(): string
+    public function getMiddleName(): ?string
     {
         return $this->middleName;
     }
@@ -84,7 +89,7 @@ class Author
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->lastName;
     }
@@ -123,4 +128,11 @@ class Author
         return $this;
     }
 
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getLastName().' '.$this->getFirstName().( $this->getMiddleName() ? ' '.$this->getMiddleName(): '')
+        ];
+    }
 }
