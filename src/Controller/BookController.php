@@ -98,12 +98,16 @@ class BookController extends OurAbstractController
     /**
      * Ищем одну книгу по точному совпадению названия
      *
-     * @Route("/book/search", name = "book_search", methods={"POST"})
+     * @Route("/book/search/{page}/{limit}", name = "book_search", methods={"POST"}, requirements={"page"="\d+", "limit"="\d+"})
      *
+     * @param int $page
+     * @param int $limit
      * @param Request $request
      * @return JsonResponse
      */
-    public function searchAction(Request $request) : JsonResponse {
+    public function searchAction(Request $request, int $page = 1, int $limit = 20) : JsonResponse {
+        [$offset, $limit] = $this->getPageLimitOffset($page, $limit);
+
         $form = $this->createForm(BookSearchForm::class);
         $form->submit($this->getJson($request));
 
@@ -112,10 +116,10 @@ class BookController extends OurAbstractController
             try {
                 $searchParams = $form->getData();
 
-                $books = $this->_bookRepository->findLike($searchParams['title']);
+                $books = $this->_bookRepository->findLike($searchParams['title'], $limit, $offset);
 
                 if(count($books) == 0) {
-                    throw new Exception("Книг не найден");
+                    throw new Exception("Книг не найдено");
                 }
 
                 return new JsonResponse($books, Response::HTTP_OK);

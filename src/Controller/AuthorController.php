@@ -42,8 +42,8 @@ class AuthorController extends OurAbstractController
      * @return JsonResponse
      */
     public function listAction(int $page = 1, int $limit = 20): JsonResponse {
-        $page = abs($page);
-        $offset = ($page - 1) * $limit;
+        [$offset, $limit] = $this->getPageLimitOffset($page, $limit);
+
         $result = $this->_authorRepository->findBy([], null, $limit, $offset);
 
         return new JsonResponse($result, Response::HTTP_OK);

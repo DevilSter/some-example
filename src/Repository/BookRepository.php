@@ -44,12 +44,16 @@ class BookRepository extends ServiceEntityRepository
 
     /**
      * @param string $expression
+     * @param int $limit
+     * @param int $offset
      * @return array
      */
-    public function findLike(string $expression) : array {
+    public function findLike(string $expression, int $limit, int $offset) : array {
         $qb = $this->createQueryBuilder('p')
             ->where('p.title LIKE :par')
-            ->setParameter("par", '%'.addcslashes($expression, '%_').'%');
+            ->setParameter("par", '%'.addcslashes($expression, '%_').'%')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
 
         $query = $qb->getQuery();
 
