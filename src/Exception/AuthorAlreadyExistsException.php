@@ -13,6 +13,6 @@ final class AuthorAlreadyExistsException extends Exception
      */
     public function __construct()
     {
-        parent::__construct("Автор с таким ФИО уже существует!");
+        parent::__construct("The author already exists!");
     }
 }

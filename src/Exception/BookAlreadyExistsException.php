@@ -13,6 +13,6 @@ final class BookAlreadyExistsException extends Exception
      */
     public function __construct()
     {
-        parent::__construct("Книга с таким названием уже существует!");
+        parent::__construct("The book already exists!");
     }
 }

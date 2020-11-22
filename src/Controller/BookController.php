@@ -119,7 +119,7 @@ class BookController extends OurAbstractController
                 $books = $this->_bookRepository->findLike($searchParams['title'], $limit, $offset);
 
                 if(count($books) == 0) {
-                    throw new Exception("Книг не найдено");
+                    throw new Exception("Books not found");
                 }
 
                 return new JsonResponse($books, Response::HTTP_OK);
@@ -153,7 +153,7 @@ class BookController extends OurAbstractController
             $book = $this->_bookRepository->find($id);
 
             if($book == null) {
-                throw new Exception("Книга не найдена");
+                throw new Exception("Book not found");
             }
 
             if($request->getLocale() === 'en') {
